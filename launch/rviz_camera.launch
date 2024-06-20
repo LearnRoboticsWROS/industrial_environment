@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Associate to the robot description parameter, the urdf file that model the robot-->
+    <param name="robot_description" command = "$(find xacro)/xacro --inorder $(find industrial_environment)/urdf/camera.xacro" />
+
+    <!-- Read the joint value-->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    
+    <!-- Visualization in Rviz-->
+    <!--<node name="rviz" pkg="rviz" type="rviz" />-->
+    <node name="rviz" pkg="rviz" type="rviz" args= "-d $(find industrial_environment)/config/config.rviz" />
+    
+
+</launch>

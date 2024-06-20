@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!-- Associate to the robot description parameter, the urdf file that model the robot-->
+    <param name="robot_description" command = "$(find xacro)/xacro --inorder $(find industrial_environment)/urdf/camera.xacro" />
+
+    <!-- Read the joint value-->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <!-- Set teh position in empty world-->
+    <arg name="x" default="0" />
+    <arg name="y" default="0" />
+    <arg name="z" default="0" />
+
+    <!-- put world file as argument-->
+    <arg name="world_file" default = "$(find industrial_environment)/worlds/table_objects.world" />
+
+    <!-- Launch Gezabo world in paused-->
+    <include file = "$(find gazebo_ros)/launch/empty_world.launch" >
+        <arg name="use_sim_time" value="true"/>
+        <arg name="debug" value="false"/>
+        <arg name="gui" value="true"/>
+        <arg name="paused" value="true" />
+        <arg name="world_name" value="$(arg world_file)"/>
+    </include>   
+
+    <!-- Spawn the robot using the package gazebo_ros-->
+    <node name="spawn_the_robot" pkg="gazebo_ros" type="spawn_model"  output="screen" args="-urdf -param robot_description -model ur5 -x $(arg x) -y $(arg y) -z $(arg z)" />
+    
+    <!-- Visualization in Rviz-->
+    <node name="rviz" pkg="rviz" type="rviz" args= "-d $(find industrial_environment)/config/config.rviz" />
+
+
+
+
+    
+</launch>
